@@ -1,0 +1,110 @@
+Excercise-1:
+
+1.select title, book_num from book_file where year >= ‘1984’;
+2.select * from book_file where year < ‘1984’OR year > ‘1986’;
+3.select pubname, pubaddress from Publishers ORDER BY pubname DESC;
+4.select * from book_file where year> ‘1985’ AND year < ‘1987’;
+5.select COUNT(book_num) from book_file;
+6.select MAX(edition) from book_file;
+7.select book_num, topic , title from book_file where topic LIKE ‘data%;
+8.select pubname, pubcode, pubaddress from Publisher where pubname LIKE ‘A%’ AND pubcode < ‘P5’ ;
+9.select DISTINCT topic from book_file;
+
+
+
+Exercise-2:
+
+1.create table Employee(EmpNo varchar(3) UNIQUE, Name varchar(10) NOT NULL, DeptNo varchar(3));
+2.INSERT INTO Employee()VALUES('E1', 'Sandy', 'D1');
+3.ALTER TABLE EmployeeADD RoomNovarchar(3);
+4.UPDATE EmployeeSET RoomNo = ‘R1’ WHERE DeptNo = ‘D2’;
+5.UPDATE EmployeeSET Name = REPLACE(Name, 'Mog', 'Fido');
+6.ALTER TABLE Employee DROP Name;
+7.DELETE from EmployeeWHERE DeptNo = 'D2';
+
+
+Exercise-3:
+
+1.select Branch.Branchname from BranchINNER JOIN Area ON Branch.area_code = Area.area_code where manager IN (‘Bloggs’);
+2.select AVG(product_price) from Product;
+3.select MAX(product_price) from Product;
+4.select town FROM BranchINNER JOIN Stock ON Branch.branch_code = Stock.branch_code INNER JOIN Product ON Stock.product_code =Product.product_code where prod_desc IN (‘Posh-Dress’);
+5.select Product.prod_desc, Branch.Branchname from Product INNER JOIN Branch ON Stock.branch_code = Branch.branch_code INNER JOIN Product ON Stock.product_code = Product.product_code where stock_quant <4; 
+
+
+
+Exercise-4:
+
+Creating Computer table:
+create table Computer(
+Id number(10) ,CompID varchar2(10),MfgName varchar2(10),MfgModel varchar2(10),ProType varchar2(10));
+
+creating Employee table:
+CREATE TABLE Employee(Id number(10) ,EmpNum int,EmpLastName varchar2(10),EmpFirstName varchar2(10),EmpPhone number(20));
+ 
+Creating PC table:
+create PC table (Id number(10) ,TagNum number(10),CompID varchar2(10)  references Computer(CompID),EmpNum int references Employee(EmpNum),
+Location varchar2(20));
+
+Creating Package table:
+create table Package  (Id number(10) ,PackID varchar2(10),PackName varchar2(20),PackVer number(10),PackType varchar2(20),PackCost number(10));
+
+Creating Software table:
+create table Software(Id number(10) ,PackID varchar2(10) references Package(PackID),TagNum number(10) references PC(TagNum),InstallDate Date,SoftCost number(10));
+
+
+Entering records for Computer :
+INSERT INTO Computer VALUES(1,'B121','Bantam','48X','486DX');
+INSERT INTO Computer VALUES(2,'B221','Bantam','48D','486DX2');
+INSERT INTO Computer VALUES(3,'C007','Cody','D1','486DX');
+INSERT INTO Computer VALUES(4,'M759','Lemmin','GRL','486SX');
+Entering records for Employee:
+INSERT INTO Employee VALUES(1,124,'Alvarez','Ramon',2212);
+INSERT INTO Employee VALUES(2,567,'Fienstein','Betty',8761);
+INSERT INTO Employee VALUES(3,611,'Dinh','Melissa',2963);
+Entering records for PC:
+INSERT INTO PC VALUES(1,32808,'M759',611,'Accounting');
+INSERT INTO PC VALUES(2,37691,'B121',124,'Sales');
+INSERT INTO PC VALUES(3,57772,'C007',611,'Information Systems');
+INSERT INTO PC VALUES(4,59836,'B221',124,'Home');
+INSERT INTO PC VALUES(5,77740,'M759',567,'Home');
+Entering records for Software:
+INSERT INTO Software VALUES(1,'AC01',32808,'13/09/1999',754.95);
+INSERT INTO Software VALUES(2,'DB32',32808,'12/03/1999',380.00);
+INSERT INTO Software VALUES(3,'DB32',37691,'15/06/1999',380.00);
+INSERT INTO Software VALUES(4,'DB33',57772,'27/05/1999',412.77);
+INSERT INTO Software VALUES(5,'WP08',32808,'1/12/1999',185.00);
+INSERT INTO Software VALUES(6,'WP08',37691,'15/06/1999',227.50);
+INSERT INTO Software VALUES(7,'WP08',57772,'27/05/1999',170.24);
+INSERT INTO Software VALUES(8,'WP08',59836,'30/10/1999',35.00);
+INSERT INTO Software VALUES(9,'WP08',77740,'27/05/1999',35.00);
+Entering records for Package:
+INSERT INTO Package VALUES(1,'AC01','Boise Accounting',3,'Accounting',725.83);
+INSERT INTO Package VALUES(2,'DB32','Manta',1.5,'Database',380.00);
+INSERT INTO Package VALUES(3,'DB33','Manta',2.1,'Database',430.18);
+INSERT INTO Package VALUES(4,'SS11','LimitLess View',5.3,'Spreadsheet',271.95);
+INSERT INTO Package VALUES(5,'WP08','Words & More',2,'Word Processing',185.00);
+INSERT INTO Package VALUES(6,'WP09','Freeware Processing',4.27,'Word Processing',30.00);
+
+Queries:
+
+1.select EmpNum, ID from Employee;
+2.select * from Computer;
+3.select * from Computer where ProTypeIN('486DX');
+4.select * from PC where NOT Location IN('Home');
+5.select CompID, MfgModel from Computer where ProType IN('486DX') OR ('486DX2');
+6.select TagNum, CompID from PC where NOT Location IN('Home');
+7.select TagNum, PackID from Software where SoftCost BETWEEN '200' AND '500';
+8.select TagNum, PackID , concat('$',(SoftCost * 0.95)) AS DiscountedSoftwareCost from Software;
+9.select TagNum, PackID ,(SoftCost * 0.95) AS DiscountedSoftwareCost from SoftwareHAVING DiscountedSoftwareCost >= 400 ;
+10.select PackName, PackID from Package where PackType IN ('Database') OR ('Spreadsheet');
+11.select EmpFirstName , COUNT(EmpFirstName) AS Count from Employee where EmpLastName IN ('Feinstein'); 
+12.select * from Package ORDER BY PackName;
+13.select * from Package ORDER BY PackCost DESC;
+14.select COUNT(PackCost) AS Count from Package where PackCost > 400;
+15.select AVG(PackCost) AS Average from Package where PackType IN ('Word Processing');
+16.select PackID, PackName from Package where PackCost > (SELECT AVG(PackCost) from Package);
+17.select PC.TagNum, PC.CompID, Computer.MfgName from ComputerINNER JOIN PC on Computer.CompID = PC.CompID;   
+18.select PC.TagNum, PC.CompID, Computer.MfgName from PCINNER JOIN Computer on PC.CompID = Computer.CompID where PC.EmpNum = '124'; 
+19.select Employee.EmpNum, Employee.EmpFirstName from EmployeeINNER JOIN PC on Employee.EmpNum = PC.EmpNum where NOT Location IN ('Home');
+20.select PC.TagNum, PC.CompID, Package.PackName, Package.PackVer, Package.PackType from PackageINNER JOIN PC on Package.ID = PC.ID
